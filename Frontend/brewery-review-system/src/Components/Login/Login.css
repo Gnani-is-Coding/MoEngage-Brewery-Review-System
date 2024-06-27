@@ -1,0 +1,48 @@
+.container {
+    height: 100vh;
+    display: flex;
+    width: 100%;
+}
+.brewery-card-container {
+    background-color: black;
+    border-radius: 10px;
+    width: 40vw;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+.brewery-heading {
+    color: #ffffff;
+}
+.form-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+.form-card-container{
+    display:flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.sign-in-heading {
+    color: black;
+    font-size: x-large;
+    font-weight: bolder;  
+}
+.sign-in-para{
+    font-family: 'lato';
+    color: black;
+    font-size: ;
+    margin-top: 5px;
+}
+
+@media screen and (min-width: 768px){
+    .brewery-card-container{
+        display: flex;
+    }
+    .form-container {
+        width: 60vw;
+    }
+}
