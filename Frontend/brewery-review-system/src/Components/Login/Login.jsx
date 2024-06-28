@@ -4,7 +4,23 @@ import './Login.css'
 
  function Login() {
     const [showPassword, setShowPassword] = useState(false)
-    const [currentView, setCurrentView] = useState('SIGN-Up')
+    const [currentView, setCurrentView] = useState('SIGN-IN')
+    const [credentials, setCredentials] = useState({username: '', password: ''})
+
+    const onSubmitForm = async(e) => {
+        e.preventDefault()
+        const loginEndpoint = 'https://moengage-brewery-review-system.onrender.com/login'
+        const options = {
+            method: 'POST',
+            body: JSON.stringify(credentials)
+        }
+        
+        const response = await fetch(loginEndpoint, options)
+
+        const result = await response.json()
+        console.log(result,"result")
+
+    }
    
     return(
         <div className='login-container'>
@@ -27,16 +43,17 @@ import './Login.css'
                 <h1 className="sign-in-heading">Sign in</h1>
                 <p className="sign-in-para">Sign in to your account</p>
 
-        <form className="form">
+        <form className="form" onSubmit={onSubmitForm}> 
             <div className="flex-column">
-                <label>Email </label>
+                <label>Username </label>
             </div>
 
             <div className="inputForm">
                 <svg height="20" viewBox="0 0 32 32" width="20" xmlns="http://www.w3.org/2000/svg"><g id="Layer_3" data-name="Layer 3">
                     <path d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z">
                 </path></g></svg>
-                <input type="text" className="input" placeholder="Enter your Email"/>
+                <input type="text" className="input" value={credentials.username} 
+                placeholder="Enter your Username" onChange={(e) => setCredentials({...credentials,username: e.target.value})} />
             </div>
         
             <div className="flex-column">
@@ -50,7 +67,9 @@ import './Login.css'
             </path>
             </svg>  
 
-            <input type={showPassword ? "text":"password"} className="input" placeholder="Enter your Password"/>
+            <input type={showPassword ? "text":"password"} className="input" 
+            value={credentials.password} placeholder="Enter your Password"
+            onChange={(e) => setCredentials({...credentials,password: e.target.value})}/>
 
             {showPassword ?  <svg width="20px" onClick={() => setShowPassword(false)} height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
