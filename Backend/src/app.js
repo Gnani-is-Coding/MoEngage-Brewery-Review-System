@@ -6,14 +6,18 @@ const sqlite3 = require("sqlite3")
 const bcrypt = require("bcrypt")
 const bodyParser = require("body-parser")
 const jwt = require("jsonwebtoken")
+const cors = require("cors");
  
 
 const dbPath = path.join(__dirname,"/Database/breweryReviews.db")
 
 let db = null 
 const app = express();
+app.use(cors())
+
 app.use(bodyParser.json());
 app.use(express.json())
+
 
 const initializeDbandServer = async () => {
     try{
@@ -73,6 +77,13 @@ app.get("/users",async (request,response) => {
 })
 
 app.get("/reviews",async (request,response) => {
+    const query = `SELECT * FROM reviews;`
+    const result = await db.all(query)
+    console.log("get users",result)
+    response.send(result)
+})
+
+app.get("/",async (request,response) => {
     const query = `SELECT * FROM reviews;`
     const result = await db.all(query)
     console.log("get users",result)

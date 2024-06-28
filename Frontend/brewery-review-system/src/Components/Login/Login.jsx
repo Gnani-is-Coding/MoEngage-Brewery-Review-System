@@ -14,7 +14,7 @@ import './Login.css'
             method: 'POST',
             body: JSON.stringify(credentials)
         }
-        
+
         const response = await fetch(loginEndpoint, options)
 
         const result = await response.json()
