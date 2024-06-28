@@ -21,7 +21,7 @@ const initializeDbandServer = async () => {
             filename: dbPath,
             driver: sqlite3.Database
         })
-        app.listen(3004, ()=> {
+        app.listen(3005, ()=> {
             console.log("Server Running at http://localhost:3004")
         })
         
@@ -67,6 +67,13 @@ const authenticateJwtToken = (request,response, next) => {
 // Get all USERS API
 app.get("/users",async (request,response) => {
     const query = `SELECT * FROM users;`
+    const result = await db.all(query)
+    console.log("get users",result)
+    response.send(result)
+})
+
+app.get("/reviews",async (request,response) => {
+    const query = `SELECT * FROM reviews;`
     const result = await db.all(query)
     console.log("get users",result)
     response.send(result)
