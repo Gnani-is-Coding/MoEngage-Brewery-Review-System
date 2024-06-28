@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation} from 'react-router-dom'
+import { useLocation, useNavigate} from 'react-router-dom'
 import { infinity } from 'ldrs';
+import Cookies from 'js-cookie'
+
 
 import './BreweryDetails.css'
 import Navbar from '../Navbar/Navbar'
@@ -13,7 +15,7 @@ function BreweryDetails() {
     
     const location = useLocation()
     const id = location.pathname.split("/")[2]
-    console.log(details)
+    const navigate = useNavigate()
     
     useEffect(() => {
         const apiCall = async () => {
@@ -25,6 +27,16 @@ function BreweryDetails() {
             setLoading(false)
         }
         apiCall()
+    },[])
+
+    useEffect(() => {
+        const jwtToken = Cookies.get("jwt_token")
+        console.log(jwtToken, "token")
+
+        if (jwtToken === undefined){
+            navigate("/login")
+        }
+
     },[])
 
   return (
