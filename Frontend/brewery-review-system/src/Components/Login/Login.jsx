@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Navbar from '../Navbar/Navbar'
 
 import './Login.css'
 
@@ -9,7 +8,12 @@ import './Login.css'
    
     return(
         <div className='login-container'>
-        <Navbar/>
+        
+        <div className='login-navbar-container'>
+      <nav className='navbar'>
+          <h1 className='navbar-heading'>Brewery Reviews</h1>
+      </nav>  
+    </div>
 
         <div className="container">
             
