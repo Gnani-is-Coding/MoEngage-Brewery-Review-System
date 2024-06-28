@@ -7,20 +7,22 @@ import Navbar from '../Navbar/Navbar'
 import './Home.css'
 
 
-
 infinity.register()
 
 function Home() {
     const [inputVal,setInput] = useState('')
     const [apiData, setApiData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [searchBy, setSearchBY] = useState('')
 
     const apiCall = async () => {
         setIsLoading(true)
-        const endPoint = `https://api.openbrewerydb.org/v1/breweries`
+        const endPoint = `https://api.openbrewerydb.org/v1/breweries?${searchBy}=${inputVal}`
+        console.log(endPoint)
         // const accessKey = process.env.REACT_APP_ACCESS_KEY  
 
         const response = await fetch(endPoint)
+
         const data = await response.json()
         console.log(data, "data")
         
@@ -29,8 +31,14 @@ function Home() {
     }
 
     useEffect(() => {
-        apiCall()
-    },[])  
+        const timerId = setTimeout(() => {
+            apiCall()
+        },400)
+    
+        return () => {
+            clearInterval(timerId)
+        }
+    },[inputVal])  
 
   return (
     <div>
@@ -43,10 +51,11 @@ function Home() {
                 <div className='search-input'>
                     <div className="dropdown-container">
                         <label for="dropdown" className='label'>Search By :</label>
-                        <select id="dropdown" name="options" style={{fontWeight: '500'}}>
-                        <option value="option1">City</option>
-                        <option value="option2">Name</option>
-                        <option value="option3">Type</option>
+                        <select id="dropdown" name="options" style={{fontWeight: '500'}} value={searchBy} 
+                        onChange={(e) =>setSearchBY(e.target.value)}>
+                        <option value="by_city">City</option>
+                        <option value="by_name">Name</option>
+                        <option value="by_type">Type</option>
                         </select>
                     </div>
 
