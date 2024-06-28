@@ -2,9 +2,11 @@ import React, { useState,useEffect } from 'react'
 import { FaSearch } from "react-icons/fa";
 import { infinity } from 'ldrs';
 import SearchResults from '../SearchResults/SearchResults'
+import Cookies from 'js-cookie'
 
 import Navbar from '../Navbar/Navbar'
 import './Home.css'
+import { useNavigate } from 'react-router';
 
 
 infinity.register()
@@ -14,6 +16,8 @@ function Home() {
     const [apiData, setApiData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [searchBy, setSearchBY] = useState('')
+
+    const navigate = useNavigate()
 
     const apiCall = async () => {
         setIsLoading(true)
@@ -34,11 +38,21 @@ function Home() {
         const timerId = setTimeout(() => {
             apiCall()
         },400)
-    
+
         return () => {
             clearInterval(timerId)
         }
-    },[inputVal])  
+    },[inputVal]) 
+    
+    useEffect(() => {
+        const jwtToken = Cookies.get("jwt_token")
+        console.log(jwtToken, "token")
+
+        if (jwtToken === undefined){
+            navigate("/login")
+        }
+
+    },[])
 
   return (
     <div>
