@@ -26,7 +26,7 @@ const initializeDbandServer = async () => {
             driver: sqlite3.Database
         })
         app.listen(3005, ()=> {
-            console.log("Server Running at http://localhost:3004")
+            console.log("Server Running at http://localhost:3005")
         })
         
     } catch(e) {
@@ -170,15 +170,19 @@ app.get('/breweries/:id/reviews', async (req, res) => {
   app.post('/breweries/:id/reviews',authenticateJwtToken, async (req, res) => {
     console.log(req.params, "params")
     const breweryId = req.params.id;
-    const { userId, review, rating } = req.body;
+    const { username, comment, rating } = req.body;
     const query = `INSERT INTO reviews (brewery_id, user_id, review, rating) 
-    VALUES(${breweryId},${userId},'${review}',${rating})`
+    VALUES(${breweryId},${username},'${comment}',${rating})`
 
     const result = await db.run(query) 
     console.log("addeds review",result.lastID)
     res.send({ result});
     });
 
+// app.post("/load", async(req,res) => {
+//     const {id} = req.params
+//     const 
+// })
 
 module.exports = app
 

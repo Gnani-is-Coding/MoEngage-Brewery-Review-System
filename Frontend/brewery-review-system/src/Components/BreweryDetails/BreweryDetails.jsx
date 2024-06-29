@@ -12,10 +12,19 @@ infinity.register()
 function BreweryDetails() {
     const [details, setDetails] = useState({})
     const [loading, setLoading] = useState(true)
+    const [reviews, setReviews] = useState([]);
+    const [newReview, setNewReview] = useState({
+        breweryId: '',
+      username: '',
+      rating: '',
+      comment: ''
+    });
     
     const location = useLocation()
     const id = location.pathname.split("/")[2]
     const navigate = useNavigate()
+    const username = Cookies.get('username')
+    const jwtToken = Cookies.get("jwt_token")
     
     useEffect(() => {
         const apiCall = async () => {
@@ -23,14 +32,30 @@ function BreweryDetails() {
             const url = `https://api.openbrewerydb.org/v1/breweries/${id}`
             const response = await fetch(url)
             const result = await response.json()
+            console.log(result.id, "result")
             setDetails(result)
+            setNewReview({...newReview, breweryId: result.id})
             setLoading(false)
         }
+        const loadBreweries = async (obj) => {
+            const url = 'https://moengage-brewery-review-system.onrender.com/breweries'
+            const jwtToken = Cookies.get("jwt_token")
+    
+            
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': 'Bearer ${jwtToken}'
+                },
+                body: obj
+            }
+        }
+
         apiCall()
     },[])
 
     useEffect(() => {
-        const jwtToken = Cookies.get("jwt_token")
         console.log(jwtToken, "token")
 
         if (jwtToken === undefined){
@@ -38,6 +63,47 @@ function BreweryDetails() {
         }
 
     },[])
+
+  useEffect(() => {
+    // Fetch existing reviews from the server
+    fetch('https://moengage-brewery-review-system.onrender.com/reviews')
+      .then(response => response.json())
+      .then(data => setReviews(data))
+      .catch(error => console.error('Error fetching reviews:', error));
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewReview({
+      ...newReview,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Post new review to the server
+    console.log({...newReview,username}, "newreview")
+
+    const url = `https://moengage-brewery-review-system.onrender.com/breweries/${details.id}/reviews`
+    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'authorization' : `Bearer ${jwtToken}`
+                        },
+                        body: JSON.stringify({...newReview,username}),
+                        })
+    
+        setReviews([...reviews, result]);
+      const result = await response.json()
+      console.log(result, "result after adding review")
+
+        
+        setNewReview({...newReview,rating: '', comment: '',breweryId: ''});
+    //   })
+    //   .catch(error => console.error('Error adding review:', error));
+  };
 
   return (
     <>
@@ -53,7 +119,7 @@ function BreweryDetails() {
                     speed="1.3" 
                     color="black" 
                     ></l-infinity>
-                    </div>): (
+            </div>): (
                     <div>
                         <div key={id} className='details-card-container'>
                         <p className='card-heading'>{details.name} </p>
@@ -72,11 +138,64 @@ function BreweryDetails() {
                             </div>
                         </div>
                         </div>
-                        <div>
-                        <h1>Reviews</h1>
-                    </div>
-                    </div>
-                    )}
+
+                <div>
+                
+                {/**reviews section */}
+                <div className="brewery-page">
+      <h1>Brewery Reviews</h1>
+
+      <div className="reviews-section">
+        <h2>Existing Reviews</h2>
+        {reviews.length > 0 ? (
+          reviews.map((review, index) => (
+            <div key={index} className="review">
+              <p><strong>Username:</strong> {review.username}</p>
+              <p><strong>Rating:</strong> {review.rating}</p>
+              <p><strong>Comment:</strong> {review.comment}</p>
+            </div>
+          ))
+        ) : (
+          <p>No reviews yet.</p>
+        )}
+      </div>
+
+      <div className="add-review-section">
+        <h2>Add a Review</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Username : {username}</label>
+          </div>
+          <div>
+            <label>Rating out of 4</label>
+            <input
+              type="number"
+              name="rating"
+              value={newReview.rating}
+              onChange={handleInputChange}
+              required
+              min="1"
+              max="5"
+            />
+          </div>
+          <div>
+            <label>Comment</label>
+            <textarea
+              name="comment"
+              value={newReview.comment}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+    {/** */}
+
+    </div>
+        </div>
+        )}
     </div>
     </>
   )

@@ -37,6 +37,8 @@ import { useNavigate } from 'react-router'
             console.log(result.jwtToken,"result")
 
             Cookies.set('jwt_token', result.jwtToken, { expires: 10 })
+            Cookies.set('username', credentials.username, { expires: 10 })
+            
             navigate('/')
         }
         else {
