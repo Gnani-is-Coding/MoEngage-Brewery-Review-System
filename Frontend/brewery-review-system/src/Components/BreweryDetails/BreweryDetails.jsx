@@ -10,7 +10,7 @@ import Navbar from '../Navbar/Navbar'
 infinity.register()
 
 function BreweryDetails() {
-    const [details, setDetails] = useState({})
+    const [details, setDetails] = useState({}) //brewerry details
     const [loading, setLoading] = useState(true)
     const [reviews, setReviews] = useState([]);
     const [newReview, setNewReview] = useState({
@@ -21,15 +21,16 @@ function BreweryDetails() {
     });
     
     const location = useLocation()
-    const id = location.pathname.split("/")[2]
+    const breweryId = location.pathname.split("/")[2]
     const navigate = useNavigate()
     const username = Cookies.get('username')
     const jwtToken = Cookies.get("jwt_token")
     
+    //API to extract info of brewery
     useEffect(() => {
         const apiCall = async () => {
             setLoading(true)
-            const url = `https://api.openbrewerydb.org/v1/breweries/${id}`
+            const url = `https://api.openbrewerydb.org/v1/breweries/${breweryId}`
             const response = await fetch(url)
             const result = await response.json()
             console.log(result.id, "result")
@@ -37,20 +38,20 @@ function BreweryDetails() {
             setNewReview({...newReview, breweryId: result.id})
             setLoading(false)
         }
-        const loadBreweries = async (obj) => {
-            const url = 'https://moengage-brewery-review-system.onrender.com/breweries'
-            const jwtToken = Cookies.get("jwt_token")
+        // const loadBreweries = async (obj) => {
+        //     const url = 'https://moengage-brewery-review-system.onrender.com/breweries'
+        //     const jwtToken = Cookies.get("jwt_token")
     
             
-            const options = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': 'Bearer ${jwtToken}'
-                },
-                body: obj
-            }
-        }
+        //     const options = {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'authorization': 'Bearer ${jwtToken}'
+        //         },
+        //         body: obj
+        //     }
+        // }
 
         apiCall()
     },[])
@@ -66,11 +67,13 @@ function BreweryDetails() {
 
   useEffect(() => {
     // Fetch existing reviews from the server
-    fetch('https://moengage-brewery-review-system.onrender.com/reviews')
+    
+    fetch(`https://moengage-brewery-review-system.onrender.com/breweries/${breweryId}/reviews`)
       .then(response => response.json())
       .then(data => setReviews(data))
       .catch(error => console.error('Error fetching reviews:', error));
-  }, []);
+
+  }, [reviews,breweryId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -85,7 +88,7 @@ function BreweryDetails() {
     // Post new review to the server
     console.log({...newReview,username}, "newreview")
 
-    const url = `https://moengage-brewery-review-system.onrender.com/breweries/${details.id}/reviews`
+    const url = `https://moengage-brewery-review-system.onrender.com/breweries/${breweryId}/reviews`
     const response = await fetch(url, {
                         method: 'POST',
                         headers: {
@@ -95,15 +98,18 @@ function BreweryDetails() {
                         body: JSON.stringify({...newReview,username}),
                         })
     
-        setReviews([...reviews, result]);
+      
       const result = await response.json()
       console.log(result, "result after adding review")
+      setReviews([...reviews, result]);
 
         
-        setNewReview({...newReview,rating: '', comment: '',breweryId: ''});
+    //     setNewReview({...newReview,rating: '', comment: '',breweryId: ''});
     //   })
     //   .catch(error => console.error('Error adding review:', error));
   };
+
+  console.log(reviews, "reviews")
 
   return (
     <>
@@ -121,7 +127,7 @@ function BreweryDetails() {
                     ></l-infinity>
             </div>): (
                     <div>
-                        <div key={id} className='details-card-container'>
+                        <div key={breweryId} className='details-card-container'>
                         <p className='card-heading'>{details.name} </p>
                         <div style={{textAlign: 'left'}} className='description-container'>
                             <p className='add-value-para'><span className='add-type'>City :</span> {details.city}</p>
@@ -138,7 +144,6 @@ function BreweryDetails() {
                             </div>
                         </div>
                         </div>
-
                 <div>
                 
                 {/**reviews section */}

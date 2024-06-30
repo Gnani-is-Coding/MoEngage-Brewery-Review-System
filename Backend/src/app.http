@@ -32,7 +32,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3005/breweries/1/reviews
+GET http://localhost:3005/breweries/10/reviews
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkduYW5pIiwiaWF0IjoxNzE5NjAwMDEyfQ.Dz6vicjeJ6bjsUrFcVcxoSEdiytDouOs9PEvXlEhr7g
 Content-Type: application/json
 
