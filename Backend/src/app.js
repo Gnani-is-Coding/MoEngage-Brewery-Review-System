@@ -156,7 +156,7 @@ app.post('/breweries',authenticateJwtToken, async (req, res) => {
     });
 
 // Get reviews for a specific brewery
-app.get('/breweries/:id/reviews', async (req, res) => {
+app.get('/breweries/:id/reviews',authenticateJwtToken, async (req, res) => {
     const breweryId = req.params.id;
     console.log("brew",breweryId)
     const query = `SELECT * FROM reviews WHERE brewery_id =${breweryId}`
@@ -168,21 +168,17 @@ app.get('/breweries/:id/reviews', async (req, res) => {
   
   // Add a review for a brewery
   app.post('/breweries/:id/reviews',authenticateJwtToken, async (req, res) => {
-    console.log(req.params, "params")
+    
     const breweryId = req.params.id;
-    const { username, comment, rating } = req.body;
+    const { userId, comment, rating } = req.body;
+    // console.log(breweryId,"id",userId,comment, rating, "while adding a review params")
     const query = `INSERT INTO reviews (brewery_id, user_id, review, rating) 
-    VALUES(${breweryId},${username},'${comment}',${rating})`
+    VALUES(${breweryId},${userId},'${comment}',${rating})`
 
     const result = await db.run(query) 
     console.log("addeds review",result.lastID)
     res.send({ result});
     });
-
-// app.post("/load", async(req,res) => {
-//     const {id} = req.params
-//     const 
-// })
 
 module.exports = app
 
