@@ -24,6 +24,7 @@ function BreweryDetails() {
     const breweryId = location.pathname.split("/")[2]
     const navigate = useNavigate()
     const userID = Cookies.get('userID')
+    const username = Cookies.get("username") 
     const jwtToken = Cookies.get("jwt_token")
     
     //API to extract info of brewery
