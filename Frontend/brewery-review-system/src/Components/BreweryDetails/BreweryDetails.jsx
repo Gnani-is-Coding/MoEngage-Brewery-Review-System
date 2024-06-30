@@ -23,7 +23,7 @@ function BreweryDetails() {
     const location = useLocation()
     const breweryId = location.pathname.split("/")[2]
     const navigate = useNavigate()
-    const username = Cookies.get('username')
+    const userID = Cookies.get('userID')
     const jwtToken = Cookies.get("jwt_token")
     
     //API to extract info of brewery
@@ -86,7 +86,7 @@ function BreweryDetails() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Post new review to the server
-    console.log({...newReview,username}, "newreview")
+    console.log({...newReview,userID}, "newreview")
 
     const url = `https://moengage-brewery-review-system.onrender.com/breweries/${breweryId}/reviews`
     const response = await fetch(url, {
@@ -95,7 +95,7 @@ function BreweryDetails() {
                             'Content-Type': 'application/json',
                             'authorization' : `Bearer ${jwtToken}`
                         },
-                        body: JSON.stringify({...newReview,username}),
+                        body: JSON.stringify({...newReview,userID}),
                         })
     
       
