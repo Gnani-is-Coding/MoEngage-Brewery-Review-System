@@ -28,8 +28,8 @@ function BreweryDetails() {
     const jwtToken = Cookies.get("jwt_token")
 
     const fetchReviews = async() => {
-      // const url = `https://moengage-brewery-review-system.onrender.com/breweries/${breweryId}/reviews`
-    const url = `http://localhost:3005/breweries/${breweryId}/reviews`
+    const url = `https://moengage-brewery-review-system.onrender.com/breweries/${breweryId}/reviews`
+    // const url = `http://localhost:3005/breweries/${breweryId}/reviews`
 
     const options = {
       method: 'GET',
@@ -106,8 +106,8 @@ function BreweryDetails() {
     // Post new review to the server
     // console.log({...newReview,userID}, "newreview")
 
-    // const url = `https://moengage-brewery-review-system.onrender.com/breweries/${breweryId}/reviews`
-    const url = `http://localhost:3005/breweries/${breweryId}/reviews`
+    const url = `https://moengage-brewery-review-system.onrender.com/breweries/${breweryId}/reviews`
+    // const url = `http://localhost:3005/breweries/${breweryId}/reviews`
     const response = await fetch(url, {
                         method: 'POST',
                         headers: {
