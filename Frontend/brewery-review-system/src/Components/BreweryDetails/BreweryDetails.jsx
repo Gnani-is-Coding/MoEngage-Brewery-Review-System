@@ -87,17 +87,18 @@ function BreweryDetails() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Post new review to the server
-    console.log({...newReview,userID}, "newreview")
+    // console.log({...newReview,userID}, "newreview")
 
-    const url = `https://moengage-brewery-review-system.onrender.com/breweries/${breweryId}/reviews`
+    // const url = `https://moengage-brewery-review-system.onrender.com/breweries/${breweryId}/reviews`
+    const url = `http://localhost:3005/breweries/${breweryId}/reviews`
     const response = await fetch(url, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'authorization' : `Bearer ${jwtToken}`
                         },
-                        body: JSON.stringify({...newReview,userID}),
-                        })
+                        body: JSON.stringify({...newReview,userId: userID}),
+      })
     
       
       const result = await response.json()
@@ -172,7 +173,7 @@ function BreweryDetails() {
           <div>
             <label>Username : {username}</label>
           </div>
-          <div>
+          <div >
             <label>Rating out of 4</label>
             <input
               type="number"
@@ -182,6 +183,7 @@ function BreweryDetails() {
               required
               min="1"
               max="5"
+              style={{marginTop: '10px', border: '1px solid'}}
             />
           </div>
           <div>

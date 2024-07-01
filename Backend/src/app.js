@@ -46,7 +46,7 @@ const authenticateJwtToken = (request,response, next) => {
     if (authorizationHeaders) {
         jwtToken = authorizationHeaders.split(" ")[1]
     }
-    console.log(jwtToken,"token")
+    // console.log(jwtToken,"token")
 
     if (jwtToken === undefined) {
         response.status = 401 
@@ -59,7 +59,7 @@ const authenticateJwtToken = (request,response, next) => {
                 console.log("invalid token")
                 response.send("Invalid JWT Token")
             }else {
-                console.log(payload, "authneicated payload")
+                // console.log(payload, "authneicated payload")
                 response.payload = payload
                 next()
             }
@@ -172,8 +172,9 @@ app.get('/breweries/:id/reviews',authenticateJwtToken, async (req, res) => {
     const { userId, comment, rating } = req.body;
     // console.log(breweryId,"id",userId,comment, rating, "while adding a review params")
     const query = `INSERT INTO reviews (brewery_id, user_id, review, rating) 
-    VALUES(${breweryId},${userId},'${comment}',${rating})`
+    VALUES('${breweryId}',${userId},'${comment}',${rating})`
 
+    console.log(query, "query")
     const result = await db.run(query) 
     console.log("addeds review",result.lastID)
     res.send({ result});
