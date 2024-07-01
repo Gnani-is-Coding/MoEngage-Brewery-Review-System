@@ -26,6 +26,27 @@ function BreweryDetails() {
     const userID = Cookies.get('userID')
     const username = Cookies.get("username") 
     const jwtToken = Cookies.get("jwt_token")
+
+    const fetchReviews = async() => {
+      // const url = `https://moengage-brewery-review-system.onrender.com/breweries/${breweryId}/reviews`
+    const url = `http://localhost:3005/breweries/${breweryId}/reviews`
+
+    const options = {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          'authorization' : `Bearer ${jwtToken}`
+      },
+    }
+
+    // console.log(options, "options")
+
+    const response = await fetch(url, options)
+     
+    const result = await response.json()
+    // console.log(result.reviews, "reviews")
+    setReviews(result.reviews)
+    }
     
     //API to extract info of brewery
     useEffect(() => {
@@ -58,7 +79,7 @@ function BreweryDetails() {
     },[])
 
     useEffect(() => {
-        console.log(jwtToken, "token")
+        // console.log(jwtToken, "token")
 
         if (jwtToken === undefined){
             navigate("/login")
@@ -66,15 +87,11 @@ function BreweryDetails() {
 
     },[])
 
-  useEffect(() => {
     // Fetch existing reviews from the server
-    
-    fetch(`https://moengage-brewery-review-system.onrender.com/breweries/${breweryId}/reviews`)
-      .then(response => response.json())
-      .then(data => setReviews(data))
-      .catch(error => console.error('Error fetching reviews:', error));
+  useEffect(() => {
+    fetchReviews()
 
-  }, [reviews,breweryId]);
+  }, [breweryId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -97,21 +114,24 @@ function BreweryDetails() {
                             'Content-Type': 'application/json',
                             'authorization' : `Bearer ${jwtToken}`
                         },
-                        body: JSON.stringify({...newReview,userId: userID}),
+        body: JSON.stringify({...newReview,userId: userID}),
       })
-    
       
-      const result = await response.json()
-      console.log(result, "result after adding review")
+      if (response.ok) {
+        const result = await response.json()
+      // console.log(result, "result after adding review")
       setReviews([...reviews, result]);
 
-        
-    //     setNewReview({...newReview,rating: '', comment: '',breweryId: ''});
-    //   })
-    //   .catch(error => console.error('Error adding review:', error));
-  };
+      setNewReview({
+        ...newReview,
+      rating: '',
+      comment: ''
+    })
 
-  console.log(reviews, "reviews")
+      fetchReviews()
+      }
+      
+  };
 
   return (
     <>
@@ -155,11 +175,11 @@ function BreweryDetails() {
       <div className="reviews-section">
         <h2>Existing Reviews</h2>
         {reviews.length > 0 ? (
-          reviews.map((review, index) => (
-            <div key={index} className="review">
-              <p><strong>Username:</strong> {review.username}</p>
-              <p><strong>Rating:</strong> {review.rating}</p>
-              <p><strong>Comment:</strong> {review.comment}</p>
+          reviews.map((obj, index) => (
+            <div key={obj.id} className="review">
+              <p><strong>Username:</strong> {username}</p>
+              <p><strong>Rating:</strong> {obj.rating}</p>
+              <p><strong>Comment:</strong> {obj.review}</p>
             </div>
           ))
         ) : (
@@ -174,7 +194,7 @@ function BreweryDetails() {
             <label>Username : {username}</label>
           </div>
           <div >
-            <label>Rating out of 4</label>
+            <label>Rating out of 5</label>
             <input
               type="number"
               name="rating"
@@ -182,7 +202,7 @@ function BreweryDetails() {
               onChange={handleInputChange}
               required
               min="1"
-              max="5"
+              max="6"
               style={{marginTop: '10px', border: '1px solid'}}
             />
           </div>

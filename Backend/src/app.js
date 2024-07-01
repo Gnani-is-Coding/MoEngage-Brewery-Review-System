@@ -158,8 +158,8 @@ app.post('/breweries',authenticateJwtToken, async (req, res) => {
 app.get('/breweries/:id/reviews',authenticateJwtToken, async (req, res) => {
     const breweryId = req.params.id;
     console.log("brew",breweryId)
-    const query = `SELECT * FROM reviews WHERE brewery_id =${breweryId}`
-
+    const query = `SELECT * FROM reviews WHERE brewery_id ='${breweryId}'`
+    console.log(query,"get reviews")
     const result = await db.all(query) 
     console.log("reviews",result)
     res.send({ reviews: result });
