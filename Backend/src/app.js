@@ -38,7 +38,7 @@ const initializeDbandServer = async () => {
 initializeDbandServer()
 
 
-//Middleware function
+//Middleware function for authentication
 const authenticateJwtToken = (request,response, next) => {
     // let jwtToken = process.env.CLIENT_JWT_TOKEN
     const authorizationHeaders = request.headers["authorization"]
@@ -83,12 +83,12 @@ app.get("/reviews",async (request,response) => {
     response.send(result)
 })
 
-app.get("/",async (request,response) => {
-    const query = `SELECT * FROM reviews;`
-    const result = await db.all(query)
-    console.log("get users",result)
-    response.send(result)
-})
+// app.get("/",async (request,response) => {
+//     const query = `SELECT * FROM reviews;`
+//     const result = await db.all(query)
+//     console.log("get users",result)
+//     response.send(result)
+// })
 
 //Register New User
 app.post("/register", async(request,response) => {
@@ -143,16 +143,16 @@ app.post("/login", async (request,response) => {
     }
 })
 
-//adding new Breweries.
-app.post('/breweries',authenticateJwtToken, async (req, res) => {
-    const { id, name } = req.body;
-    console.log(id, name, "id")
-    const query = `INSERT INTO breweries (id,name) VALUES(${id},${name})`
+// //adding new Breweries.
+// app.post('/breweries',authenticateJwtToken, async (req, res) => {
+//     const { id, name } = req.body;
+//     console.log(id, name, "id")
+//     const query = `INSERT INTO breweries (id,name) VALUES(${id},${name})`
 
-    const result = await db.run(query) 
-    console.log(`Created new brewwery with ${result.lastID}`)
-      res.send({ id: this.lastID });
-    });
+//     const result = await db.run(query) 
+//     console.log(`Created new brewwery with ${result.lastID}`)
+//       res.send({ id: this.lastID });
+//     });
 
 // Get reviews for a specific brewery
 app.get('/breweries/:id/reviews',authenticateJwtToken, async (req, res) => {

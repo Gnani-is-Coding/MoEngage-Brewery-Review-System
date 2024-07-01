@@ -60,20 +60,6 @@ function BreweryDetails() {
             setNewReview({...newReview, breweryId: result.id})
             setLoading(false)
         }
-        // const loadBreweries = async (obj) => {
-        //     const url = 'https://moengage-brewery-review-system.onrender.com/breweries'
-        //     const jwtToken = Cookies.get("jwt_token")
-    
-            
-        //     const options = {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'authorization': 'Bearer ${jwtToken}'
-        //         },
-        //         body: obj
-        //     }
-        // }
 
         apiCall()
     },[])

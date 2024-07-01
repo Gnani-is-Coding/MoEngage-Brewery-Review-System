@@ -1,15 +1,13 @@
 ###
-GET http://localhost:3004/reviews 
-
-
-POST http://localhost:3004/register
+POST http://localhost:3005/register
 Content-Type: application/json
 
 {
-    "username": "user2",
+    "username": "user7",
     "password": "1234",
-    "email": "user2@gmail.com"
+    "email": "user7@gmail.com"
 }
+
 
 ###
 POST http://localhost:3005/login 
@@ -21,20 +19,12 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3005/breweries/1/reviews
+GET http://localhost:3005/breweries/1/reviews
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkduYW5pIiwiaWF0IjoxNzE5NjAwMDEyfQ.Dz6vicjeJ6bjsUrFcVcxoSEdiytDouOs9PEvXlEhr7g
 Content-Type: application/json
-
-{
-    "userId": "1",
-    "review": "Good",
-    "rating" : "4"
-}
 
 ###
-GET http://localhost:3005/breweries/10/reviews
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkduYW5pIiwiaWF0IjoxNzE5NjAwMDEyfQ.Dz6vicjeJ6bjsUrFcVcxoSEdiytDouOs9PEvXlEhr7g
-Content-Type: application/json
+GET http://localhost:3005/reviews
 
 ###
 POST http://localhost:3005/breweries/1/reviews
@@ -42,8 +32,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkduY
 Content-Type: application/json 
 
 {
-  "breweryId": "1",
+  "breweryId": "4",
   "userId": "1",
-  "comment": "It has the Best vibes",
-  "rating": "4.5"
+  "comment": " Best vibes",
+  "rating": "3"
 }
